@@ -1,0 +1,40 @@
+- stat:
+    path: /usr/lib/postgresql/9.6/lib/pg_stat_kcache.so
+  register: pg_stat_kcache
+
+- name: download pg_stat_kcache sources
+  unarchive:
+    src: https://github.com/dalibo/pg_stat_kcache/archive/REL2_0_3.tar.gz
+    dest: /tmp
+    remote_src: true
+  when: pg_stat_kcache.stat.exists == False
+
+- name: compiling pg_stat_kcache
+  make:
+    chdir: /tmp/pg_stat_kcache-REL2_0_3
+  when: pg_stat_kcache.stat.exists == False
+
+- name: installing pg_stat_kcache
+  become: true
+  make:
+    chdir: /tmp/pg_stat_kcache-REL2_0_3
+    target: install
+  when: pg_stat_kcache.stat.exists == False
+
+- name: remove sources
+  file:
+    path: /tmp/pg_stat_kcache-REL2_0_3
+    state: absent
+
+- name: check configuration
+  command: grep -q pg_stat_kcache /etc/postgresql/9.6/main/postgresql.conf
+  register: result
+  ignore_errors: True
+
+- name: enable extension
+  become: true
+  become_user: postgres
+  shell: pg_conftool set shared_preload_libraries "pg_stat_kcache,$(pg_conftool show --short shared_preload_libraries)"
+  notify:
+    - postgresql restart
+  when: result|failed
