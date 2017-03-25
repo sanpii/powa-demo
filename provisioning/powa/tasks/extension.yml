@@ -1,0 +1,13 @@
+- name: check configuration
+  command: grep -q powa /etc/postgresql/9.6/main/postgresql.conf
+  register: result
+  ignore_errors: True
+
+- name: enable powa extension
+  become: true
+  become_user: postgres
+  shell: pg_conftool set shared_preload_libraries "powa,$(pg_conftool show --short shared_preload_libraries)"
+# @TODO Reload now
+  notify:
+    - postgresql restart
+  when: result|failed

@@ -1,0 +1,9 @@
+- name: install powa
+  become: true
+  package:
+    name: postgresql-9.6-powa
+    state: present
+
+- include: extension.yml
+- include: database.yml
+- include: powa-web.yml
