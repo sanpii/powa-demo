@@ -20,3 +20,4 @@
 
 - include: database.yml
 - include: powa-web.yml
+- include: data.yml

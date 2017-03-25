@@ -1,0 +1,35 @@
+- name: create test database
+  become: true
+  become_user: postgres
+  postgresql_db:
+    name: demo
+
+- name: enable extensions
+  become: true
+  become_user: postgres
+  postgresql_ext:
+    name: "{{ item }}"
+    db: demo
+  with_items:
+    - btree_gist
+    - pg_stat_statements
+    - pg_qualstats
+    - pg_stat_kcache
+
+- name: download data
+  unarchive:
+    src: http://pgfoundry.org/frs/download.php/935/french-towns-communes-francaises-1.0.tar.gz
+    dest: /tmp
+    remote_src: true
+    creates: /tmp/french-towns-communes-francaises.sql
+
+- name: load data
+  become: true
+  become_user: postgres
+  command: psql --file /tmp/french-towns-communes-francaises.sql demo
+  ignore_errors: true
+
+- name: query data
+  become: true
+  become_user: postgres
+  command: psql --command "SELECT t.name, d.name, r.name FROM Towns t INNER JOIN Departments d ON d.code = t.department INNER JOIN Regions r ON r.code = d.region WHERE t.name = 'Abbaretz';" demo
