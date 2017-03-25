@@ -1,12 +1,7 @@
-- name: check configuration
-  command: grep -q pg_stat_statements /etc/postgresql/9.6/main/postgresql.conf
-  register: result
-  ignore_errors: True
-
-- name: enable extension
+- name: enable pg_stat_statements extension
   become: true
   become_user: postgres
-  shell: pg_conftool set shared_preload_libraries "pg_stat_statements,$(pg_conftool show --short shared_preload_libraries)"
-  notify:
-    - postgresql restart
-  when: result|failed
+  postgresql_conf:
+    key: shared_preload_libraries
+    value: pg_stat_statements
+    state: append
