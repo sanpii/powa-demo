@@ -1,0 +1,8 @@
+- name: install uwsgi
+  become: true
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - uwsgi
+    - uwsgi-plugin-python
