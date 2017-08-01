@@ -2,6 +2,12 @@
     path: /usr/lib/postgresql/9.6/lib/pg_qualstats.so
   register: pg_qualstats
 
+- name: install libdpkg-perl
+  become: true
+  package:
+    name: libdpkg-perl
+    state: present
+
 - name: download pg_qualstats sources
   unarchive:
     src: https://github.com/dalibo/pg_qualstats/archive/1.0.2.tar.gz
