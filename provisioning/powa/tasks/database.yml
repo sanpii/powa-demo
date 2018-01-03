@@ -11,6 +11,7 @@
     name: powa
     role_attr_flags: SUPERUSER,LOGIN
     password: powa
+    encrypted: yes
 
 - name: create powa database
   become: true
