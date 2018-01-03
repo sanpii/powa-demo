@@ -1,7 +1,3 @@
 dependencies:
-  - postgresql
-  - pg_qualstats
-  - pg_stat_kcache
-  - hypopg
-  - pg_stat_statements
+  - sanpii.powa
   - uwsgi
