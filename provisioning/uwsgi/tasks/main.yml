@@ -6,3 +6,10 @@
   with_items:
     - uwsgi
     - uwsgi-plugin-python
+
+- name: start uwsgi
+  become: true
+  service:
+    name: uwsgi
+    state: started
+    enabled: yes
