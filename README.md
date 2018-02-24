@@ -1,6 +1,6 @@
 # PoWA demo
 
-This is a one command demo for [PoWA](https://dalibo.github.io/powa/).
+This is a one command demo for [PoWA](https://powa.readthedocs.io).
 
 Just run:
 
