@@ -32,4 +32,10 @@
     - powa
     - pg_qualstats
     - pg_stat_kcache
+    - pg_wait_sampling
     - hypopg
+
+- name: register pg_wait_sampling
+  become: true
+  become_user: postgres
+  command: psql --command "SELECT powa_wait_sampling_register();" powa
