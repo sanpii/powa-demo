@@ -4,17 +4,12 @@
   postgresql_db:
     name: demo
 
-- name: enable extensions
+- name: enable hypopg extension
   become: true
   become_user: postgres
   postgresql_ext:
-    name: "{{ item }}"
+    name: hypopg
     db: demo
-  with_items:
-    - btree_gist
-    - pg_stat_statements
-    - pg_qualstats
-    - pg_stat_kcache
 
 - name: download data
   get_url:
